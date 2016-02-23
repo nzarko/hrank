@@ -87,7 +87,7 @@ public:
 	int getLength() const  { return l; }
 	int getBreadth()const { return b; }
 	int getHeight() const { return h; }
-	long long CalculateVolume() { return l*h*b; }
+	long long CalculateVolume() { return (long long) l*h*b; }
 	bool operator < (Box &B) {
 		return ((l < B.getLength()) || (b < B.getBreadth() && l == B.getLength() ||
 			h < B.getHeight() && l == B.getLength() && b == B.getBreadth()));
