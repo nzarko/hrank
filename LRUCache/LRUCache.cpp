@@ -97,11 +97,89 @@ protected:
 class LRUCache : public Cache
 {
 	int capacity;
-public:
+	vector <Node *> _freeEntries;
+	Node * entries;
+
+	//private default constructor
 	LRUCache() {}
-	explicit LRUCache(int cap):capacity(cap) {}
-	void set(int,int) override {}
-	int get(int) override { return 0; }
+	void detach(Node* node)
+	{
+		node->prev->next = node->next;
+		node->next->prev = node->prev;
+	}
+
+	void attach(Node* node)
+	{
+		node->next = head->next;
+		node->prev = head;
+		head->next = node;
+		node->next->prev = node;
+	}
+
+public:
+	explicit LRUCache(int cap):capacity(cap)
+	{		
+		//entries = new Node(0, 0)[cap];
+		for (int i = 0; i < cap; i++)
+		{
+			entries = new Node(0, 0);
+			_freeEntries.push_back(entries);
+		}
+		head = new Node(0, 0);
+		tail = new Node(0, 0);
+		head->prev = nullptr;
+		head->next = tail;
+		tail->next = nullptr;
+		tail->prev = head;
+	}
+	~LRUCache()
+	{
+		delete head;
+		delete tail;
+		delete entries;
+	}
+	void set(int key,int value) override {
+		Node* node = mp[key];
+		if (node)
+		{
+			// refresh the link list
+			detach(node);
+			node->value = value;
+			attach(node);
+		}
+		else {
+			if (_freeEntries.empty())
+			{
+				node = tail->prev;
+				detach(node);
+				mp.erase(node->key);
+				node->value = value;
+				node->key = key;
+				mp[key] = node;
+				attach(node);
+			}
+			else {
+				node = _freeEntries.back();
+				_freeEntries.pop_back();
+				node->key = key;
+				node->value = value;
+				mp[key] = node;
+				attach(node);
+			}
+		}
+	}
+
+	int get(int key) override { 
+		Node* node = mp[key];
+		if (node)
+		{
+			detach(node);
+			attach(node);
+			return node->value;
+		}
+		else 
+			return -1; 
+	}
 };
 
 
