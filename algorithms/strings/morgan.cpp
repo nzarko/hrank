@@ -27,12 +27,20 @@ string make_lex_string(string s1,string s2) {
    string res ;
    size_t i=0,j=0;
    while (i<s1.size() && j < s2.size()) {
-      if ( s1[i] <= s2[j] ) {
+      if ( s1[i] < s2[j] ) {
          res += s1[i];
          i++;
-      }else {
+      }else if (s1[i] > s2[j]) {
          res += s2[j];
          j++;
+      } else { 
+         if (s1.compare(i,string::npos,s2,j,string::npos) < 0 ) {//s1 < s2
+            res += s1[i];
+            i++;
+         } else {
+            res += s2[j];
+            j++;
+         }
       }
    }
    string s = (i==s1.size() ? s2 : s1);
