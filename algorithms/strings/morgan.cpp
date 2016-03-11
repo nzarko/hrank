@@ -24,28 +24,46 @@ ostream & operator << ( ostream &os, StackedString ss) {
 }
 
 string make_lex_string(string s1,string s2) {
-   string res ;
-   size_t i=0,j=0;
+   string res="" ;
+   int i=0,j=0;
    while (i<s1.size() && j < s2.size()) {
       if ( s1[i] < s2[j] ) {
-         res += s1[i];
-         i++;
+         res += s1[i++];        
       }else if (s1[i] > s2[j]) {
-         res += s2[j];
-         j++;
-      } else { 
-         if (s1.compare(i,string::npos,s2,j,string::npos) < 0 ) {//s1 < s2
-            res += s1[i];
-            i++;
-         } else {
+         res += s2[j++];
+      } else {
+         int x = i, y = j;
+         char a = s1[i];
+         while(x < s1.length() && y < s2.length()) {
+            if ( s1[x] != s2[y] )
+               break;
+            else if(s1[x] > a) {
+               res += s1.substr(i,x)+ s2.substr(j,y);
+               i = x;
+               j = y;
+               a = s1[x];
+            }
+            x++; y++;
+         }
+         if(x == s1.length()) {
             res += s2[j];
             j++;
+         } else if ( y == s2.length()) {
+            res+=s1[i];
+            i++;
+         } else {
+            if (s1[x] < s2[y] ) {
+               res += s1[i,x];
+               i = x;
+            } else {
+               res += s2[j,y];
+               j = y;
+            }
          }
       }
    }
-   string s = (i==s1.size() ? s2 : s1);
-   int k = i==s1.size() ? j : i;
-   res += s.substr(k);
+
+   res += s1.substr(i) + s2.substr(j);
    return res;
 }
 int main() {
