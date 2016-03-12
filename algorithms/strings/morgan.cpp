@@ -53,11 +53,11 @@ string make_lex_string(string s1,string s2) {
             i++;
          } else {
             if (s1[x] < s2[y] ) {
-               res += s1[i,x];
-               i = x;
+               res += s1[i];
+               i ++;
             } else {
-               res += s2[j,y];
-               j = y;
+               res += s2[j];
+               j++;
             }
          }
       }
