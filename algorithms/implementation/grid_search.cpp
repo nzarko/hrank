@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include "bigint.h"
 using namespace std;
 
 ostream & operator << (ostream &os, vector<size_t> p) {
