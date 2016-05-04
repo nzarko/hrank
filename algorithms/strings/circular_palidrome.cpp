@@ -97,10 +97,12 @@ string findLongestPalindromicString(string text)
     end = start + maxLPSLength - 1;
     //printf("LPS of string is %s : ", text.c_str());
     string res;
-    for(i=start; i<=end; i++) {
-       //        printf("%c", text[i]);
-       res.push_back(text[i]);
-    }
+    // for(i=start; i<=end; i++) {
+    //    //        printf("%c", text[i]);
+    //    res.push_back(text[i]);
+    // }
+
+    res = text.substr(start, end-start);
        
     //printf("\n");
     return res;
